@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect } from "react";
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  Inter_400Regular,
+  Inter_700Bold,
+} from "@expo-google-fonts/inter";
+
+import Routes from "./src/routes";
+
+import Home from "./src/pages/Home";
+import Statistics from "./src/pages/Statistics";
+import NewEvent from "./src/pages/NewEvent";
+
+import DatabaseInit from "./src/database/init";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  let [fontsLoaded] = useFonts({
+    Inter_400Regular,
+    Inter_700Bold,
+  });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  useEffect(() => {
+    new DatabaseInit();
+  }, []);
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+
+  return <Routes />;
+}
